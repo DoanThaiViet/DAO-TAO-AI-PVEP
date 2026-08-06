@@ -134,7 +134,14 @@ body{
 }
 .rail__brand{ display:flex; align-items:center; gap:.55rem; margin-bottom:.2rem; }
 .rail__title{ font-family:var(--font-display); font-weight:800; color:var(--pvep-navy); font-size:.92rem; line-height:1; }
-.rail__sub{ font-size:.58rem; color:var(--ink-500); text-transform:uppercase; letter-spacing:.14em; margin:.15rem 0 1rem; line-height:1.4; }
+.rail__sub{ font-size:.58rem; color:var(--ink-500); text-transform:uppercase; letter-spacing:.14em; margin:.15rem 0 .5rem; line-height:1.4; }
+.rail__who{ display:flex; align-items:center; flex-wrap:wrap; gap:.4rem; margin:0 0 1rem; padding-top:.5rem;
+  border-top:1px solid rgba(10,42,74,.10); font-family:var(--font-display); font-weight:800; font-size:.72rem; color:var(--pvep-navy); line-height:1.2; }
+.rail__who small{ flex:0 0 100%; font-family:var(--font-body); font-weight:600; font-size:.56rem; color:var(--ink-500);
+  text-transform:uppercase; letter-spacing:.12em; padding-left:1rem; }
+.rail__whodot{ width:7px; height:7px; border-radius:50%; flex:none; background:linear-gradient(135deg,var(--pvep-blue),var(--pvep-green)); box-shadow:0 0 0 3px rgba(0,176,80,.14); }
+body.hero-mode .rail__who{ color:#fff; border-top-color:rgba(255,255,255,.18); text-shadow:0 2px 8px rgba(0,0,0,.45); }
+body.hero-mode .rail__who small{ color:rgba(255,255,255,.72); }
 .rail__item{ display:flex; gap:.55rem; align-items:center; padding:.5rem .55rem; border-radius:10px; cursor:pointer; color:var(--ink-500); font-size:.74rem; font-weight:600; line-height:1.2; transition:color .25s, background .25s; }
 .rail__item .dot{ width:7px; height:7px; border-radius:50%; background:var(--ac-track); flex:none; transition:background .25s, box-shadow .25s; }
 .rail__num{ font-family:var(--font-display); font-weight:700; opacity:.45; font-size:.7rem; min-width:1.6em; }
@@ -172,6 +179,33 @@ body{
 @media (min-width:1000px){ .deckfoot{ left:var(--rail); } }
 .deckfoot__l{ font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .deckfoot__r{ font-family:var(--font-display); font-weight:700; color:var(--pvep-navy); flex:none; }
+
+/* ----- Watermark tác giả (gắn vào từng slide bằng JS) ----- */
+.wmark{
+  position:absolute; right:.45rem; top:50%; transform:translateY(-50%);
+  writing-mode:vertical-rl; z-index:3; pointer-events:none; user-select:none;
+  font-family:var(--font-display); font-weight:700; font-size:.58rem; letter-spacing:.2em;
+  text-transform:uppercase; color:rgba(10,42,74,.26); white-space:nowrap;
+}
+.slide[data-hero] .wmark{ color:rgba(255,255,255,.5); text-shadow:0 1px 6px rgba(0,0,0,.35); }
+@media (max-width:999px){ .wmark{ font-size:.5rem; right:.2rem; } }
+
+/* ----- Hero mode: video tràn qua rail ----- */
+.rail,.deckfoot,.counter,.hint{ transition:background .45s var(--ac-ease), color .45s var(--ac-ease), border-color .45s var(--ac-ease); }
+body.hero-mode .rail{ background:linear-gradient(180deg, rgba(8,18,30,.30), rgba(8,18,30,.12)); border-right-color:rgba(255,255,255,.18); backdrop-filter:blur(2px); -webkit-backdrop-filter:blur(2px); }
+body.hero-mode .rail__title{ color:#fff; text-shadow:0 2px 8px rgba(0,0,0,.45); }
+body.hero-mode .rail__sub{ color:rgba(255,255,255,.7); }
+body.hero-mode .rail__item{ color:rgba(255,255,255,.82); text-shadow:0 1px 6px rgba(0,0,0,.35); }
+body.hero-mode .rail__item .dot{ background:rgba(255,255,255,.35); }
+body.hero-mode .rail__item:hover{ color:#fff; background:rgba(255,255,255,.10); }
+body.hero-mode .rail__item.is-active,body.hero-mode .rail__item--sub.is-active{ color:#fff; background:rgba(255,255,255,.16); }
+body.hero-mode .rail__item.is-active .dot{ background:#fff; box-shadow:0 0 0 4px rgba(255,255,255,.22); }
+body.hero-mode .rail__item.is-active .rail__num{ color:#fff; opacity:1; }
+body.hero-mode .deckfoot{ background:linear-gradient(180deg, rgba(6,26,48,0), rgba(6,26,48,.45) 55%); color:rgba(255,255,255,.86); }
+body.hero-mode .deckfoot__r{ color:#fff; }
+body.hero-mode .counter{ background:rgba(6,26,48,.38); border-color:rgba(255,255,255,.28); color:#fff; }
+body.hero-mode .counter #cur{ color:#8ee3ff; }
+body.hero-mode .hint{ color:rgba(255,255,255,.72); }
 
 /* ============================================================
    OFFSHORE BACKGROUND (slide 2+) — ảnh làm mờ + phủ sáng
@@ -214,11 +248,12 @@ body{
 
 /* ----- Hero video background + white text over video ----- */
 .video-bg-wrap{ position:absolute; inset:0; z-index:0; overflow:hidden; }
-.video-bg-wrap video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
-.video-bg-wrap::after{ content:""; position:absolute; inset:0; background:linear-gradient(120deg, rgba(10,42,74,.62) 0%, rgba(10,42,74,.42) 45%, rgba(10,42,74,.58) 100%); }
+.video-bg-wrap video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(1.14) saturate(.86) contrast(1.02); }
+.video-bg-wrap::after{ content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(8,18,30,.40) 0%, rgba(8,18,30,.12) 34%, rgba(8,18,30,.16) 60%, rgba(8,18,30,.44) 100%); }
 .slide[data-hero] .slide-content{ position:relative; z-index:2; }
-.slide[data-hero] .hero__eyebrow{ color:#cfeafe; text-shadow:0 2px 8px rgba(0,0,0,.5); }
-.slide[data-hero] .hero__word{ background:none; -webkit-text-fill-color:#fff; color:#fff; text-shadow:0 3px 16px rgba(0,0,0,.55); }
+.slide[data-hero] .hero__eyebrow{ color:#e8f4ff; text-shadow:0 2px 10px rgba(0,0,0,.6); }
+.slide[data-hero] .hero__word{ background:none; -webkit-text-fill-color:#fff; color:#fff; text-shadow:0 3px 18px rgba(0,0,0,.6), 0 1px 4px rgba(0,0,0,.5); }
 .slide[data-hero] .hero__sub{ color:#fff; text-shadow:0 2px 10px rgba(0,0,0,.5); }
 .slide[data-hero] .hero__msg{ color:rgba(255,255,255,.94); text-shadow:0 2px 10px rgba(0,0,0,.5); }
 .slide[data-hero] .hero__msg b{ color:#fff; }
@@ -1299,7 +1334,7 @@ body{
       #eef3f8 url("assets/offshore-still.jpg") center center / cover no-repeat !important;
   }
   .slide:last-child{ page-break-after:auto !important; break-after:auto !important; }
-  .slide[data-hero]{ background:linear-gradient(180deg, rgba(10,42,74,.5), rgba(10,42,74,.62)), #0A2A4A url("assets/offshore-still.jpg") center center / cover no-repeat !important; }
+  .slide[data-hero]{ background:linear-gradient(180deg, rgba(8,18,30,.34), rgba(8,18,30,.46)), #0A2A4A url("assets/offshore-still.jpg") center center / cover no-repeat !important; }
   .slide[data-hero] .hero__word{ background:none !important; -webkit-text-fill-color:#fff !important; color:#fff !important; }
   .slide-content{ flex:1 !important; height:auto !important; max-height:210mm !important; overflow:hidden !important; justify-content:center !important; padding-left:var(--slide-padding) !important; }
   .wrap,.wrap--wide{ width:96% !important; max-width:none !important; }
@@ -1490,17 +1525,18 @@ body{
     <span class="rail__title">PVEP</span>
   </div>
   <div class="rail__sub">Chia sẻ nội bộ · AI làm slide</div>
+  <div class="rail__who"><span class="rail__whodot"></span>Đoàn Thái Việt<small>Ban KSNB · PVEP</small></div>
   <div class="rail__item" data-chapter="0" data-target="0"><span class="dot"></span><span class="rail__num">I</span>Mở đầu</div>
   <div class="rail__item" data-chapter="1" data-target="5"><span class="dot"></span><span class="rail__num">II</span>Khởi động &amp; nguyên tắc</div>
   <div class="rail__item rail__item--sub" data-chapter="1" data-goto="s-dauprompt"><span class="dot"></span>🕵️ Sếp thiếu gì?</div>
   <div class="rail__item" data-chapter="2" data-target="11"><span class="dot"></span><span class="rail__num">III</span>3 cách &amp; thực hành</div>
   <div class="rail__item rail__item--sub" data-chapter="2" data-goto="s-cach1"><span class="dot"></span>Cách 1 · ChatGPT/NotebookLM</div>
   <div class="rail__item rail__item--sub" data-chapter="2" data-goto="s-sanloi"><span class="dot"></span>🔍 Săn lỗi AI</div>
-  <div class="rail__item rail__item--sub" data-chapter="2" data-goto="s-lab1"><span class="dot"></span>🛠 LAB 1</div>
   <div class="rail__item rail__item--sub" data-chapter="2" data-goto="s-cach2"><span class="dot"></span>Cách 2 · Moda</div>
   <div class="rail__item rail__item--sub" data-chapter="2" data-goto="s-cach3"><span class="dot"></span>Cách 3 · Claude Code</div>
   <div class="rail__item rail__item--sub" data-chapter="2" data-goto="s-brandkit"><span class="dot"></span>🎨 Brandkit PVEP</div>
   <div class="rail__item rail__item--sub" data-chapter="2" data-goto="s-sosanh"><span class="dot"></span>So sánh &amp; chọn</div>
+  <div class="rail__item rail__item--sub" data-chapter="2" data-goto="s-lab1"><span class="dot"></span>🛠 LAB tổng kết</div>
   <div class="rail__item" data-chapter="3" data-target="27"><span class="dot"></span><span class="rail__num">IV</span>Cầm về &amp; tổng kết</div>
   <div class="rail__item rail__item--sub" data-chapter="3" data-goto="s-thuvien"><span class="dot"></span>Thư viện 8 prompt</div>
   <div class="rail__item rail__item--sub" data-chapter="3" data-goto="s-trienlam"><span class="dot"></span>🤖 AI hay Người?</div>
@@ -1547,7 +1583,7 @@ body{
       <div class="aim-out">
         <div class="aim-chip aim-chip--ppt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><b>PowerPoint</b></div>
         <div class="aim-chip aim-chip--moda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg><b>Moda</b></div>
-        <div class="aim-chip aim-chip--html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 8-4 4 4 4M16 8l4 4-4 4"/></svg><b>HTML</b></div>
+        <div class="aim-chip aim-chip--html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 8-4 4 4 4M16 8l4 4-4 4"/></svg><b>Claude</b></div>
       </div>
     </div>
 
@@ -1684,25 +1720,27 @@ body{
       <div class="sess sess--1 ac-reveal ac-reveal--left" style="--i:2">
         <span class="sess__tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>BUỔI SÁNG · 08:30–11:00</span>
         <div class="sess__h">Ra lệnh cho AI &amp; làm thử ngay</div>
-        <div class="sess__sub">Hết sáng: đã có bản nháp infographic đầu tiên</div>
+        <div class="sess__sub">Hết sáng: viết được prompt đủ 6 phần và bắt được lỗi AI</div>
         <div class="sess__row"><div class="sess__t">08:30–08:45</div><div class="sess__d">Khởi động · Mentimeter: <b>đang dùng AI nào</b> &amp; nỗi đau làm slide</div></div>
         <div class="sess__row"><div class="sess__t">08:45–09:15</div><div class="sess__d">3 câu hỏi trước khi mở AI · <b>prompt tốt có 6 phần</b> · Trước/Sau</div></div>
         <div class="sess__row"><div class="sess__t">09:15–09:40</div><div class="sess__d">🕵️ <b>SẾP THIẾU GÌ?</b> — mổ xẻ tin nhắn giao việc mù mờ, lật 6 thẻ</div></div>
         <div class="sess__row"><div class="sess__t">09:40–09:50</div><div class="sess__d">☕ Giải lao</div></div>
-        <div class="sess__row"><div class="sess__t">09:50–10:15</div><div class="sess__d">Cách 1 · ChatGPT / NotebookLM + <b>demo trực tiếp</b></div></div>
-        <div class="sess__row"><div class="sess__t">10:15–10:30</div><div class="sess__d">🔍 <b>SĂN LỖI AI</b> — tìm 3 lỗi giấu trong slide AI làm</div></div>
-        <div class="sess__row"><div class="sess__t">10:30–11:00</div><div class="sess__d">🛠 <b>LAB 1</b> — tài liệu thật của anh/chị → infographic</div></div>
+        <div class="sess__row"><div class="sess__t">09:50–10:20</div><div class="sess__d">Cách 1 · ChatGPT / NotebookLM + <b>demo trực tiếp</b></div></div>
+        <div class="sess__row"><div class="sess__t">10:20–10:45</div><div class="sess__d"><b>Master text → slide</b> · khoá giao diện để cả bộ đồng nhất</div></div>
+        <div class="sess__row"><div class="sess__t">10:45–11:00</div><div class="sess__d">🔍 <b>SĂN LỖI AI</b> — tìm 3 lỗi giấu trong slide AI làm · bảng tự chấm</div></div>
       </div>
       <div class="sess sess--2 ac-reveal ac-reveal--right" style="--i:3">
         <span class="sess__tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>BUỔI CHIỀU · 13:30–16:00</span>
         <div class="sess__h">Hoàn thiện &amp; mang sản phẩm về</div>
-        <div class="sess__sub">Hết chiều: cầm về 1 slide của mình + bộ KIT 5 món</div>
+        <div class="sess__sub">Hết chiều: cầm về 1 sản phẩm của mình + bộ KIT 5 món</div>
         <div class="sess__row"><div class="sess__t">13:30–13:50</div><div class="sess__d">Cách 2 · <b>Moda</b> — giới thiệu nhanh + xem bộ slide thật Moda đã làm</div></div>
-        <div class="sess__row"><div class="sess__t">13:50–14:40</div><div class="sess__d">🛠 <b>Hoàn thiện slide buổi sáng</b> — làm đẹp, soát số liệu, nộp thư mục chung</div></div>
-        <div class="sess__row"><div class="sess__t">14:40–14:50</div><div class="sess__d">☕ Giải lao</div></div>
-        <div class="sess__row"><div class="sess__t">14:50–15:10</div><div class="sess__d">Cách 3 · <b>Claude Code</b> · so sánh 3 cách · 5 lỗi thường gặp</div></div>
-        <div class="sess__row"><div class="sess__t">15:10–15:35</div><div class="sess__d">🤖 <b>AI HAY NGƯỜI?</b> — đố vui 5 vòng, trao giải “Mắt thần”</div></div>
-        <div class="sess__row"><div class="sess__t">15:35–16:00</div><div class="sess__d">Hỏi đáp mở · <b>phát KIT</b> · tổng kết</div></div>
+        <div class="sess__row"><div class="sess__t">13:50–14:20</div><div class="sess__d">Cách 3 · <b>Claude Code</b> + <b>brandkit PVEP</b> (tự tạo trong 5 phút)</div></div>
+        <div class="sess__row"><div class="sess__t">14:20–14:30</div><div class="sess__d">☕ Giải lao</div></div>
+        <div class="sess__row"><div class="sess__t">14:30–14:45</div><div class="sess__d"><b>So sánh &amp; chọn</b> — việc nào dùng cách nào</div></div>
+        <div class="sess__row"><div class="sess__t">14:45–15:15</div><div class="sess__d">🛠 <b>LAB TỔNG KẾT</b> — tài liệu thật của anh/chị → 1 sản phẩm</div></div>
+        <div class="sess__row"><div class="sess__t">15:15–15:30</div><div class="sess__d">Thư viện 8 prompt · xử lý sự cố · <b>5 lỗi hay gặp</b></div></div>
+        <div class="sess__row"><div class="sess__t">15:30–15:45</div><div class="sess__d">🤖 <b>AI HAY NGƯỜI?</b> — đố vui, trao giải “Mắt thần”</div></div>
+        <div class="sess__row"><div class="sess__t">15:45–16:00</div><div class="sess__d">Hỏi đáp mở · <b>phát KIT</b> · tổng kết</div></div>
       </div>
     </div>
     <div class="dayline ac-reveal" style="--i:4"><b>Giảng 2 tiếng</b><span class="dayline__bar"><i></i></span><b>Anh/chị làm 3 tiếng</b></div>
@@ -1895,22 +1933,22 @@ body{
     <div class="two" style="margin-top:clamp(.6rem,1.8vh,1rem);align-items:stretch;grid-template-columns:1fr 1.25fr">
       <div class="zchat ac-reveal ac-reveal--left" style="--i:3">
         <div class="zchat__h"><span class="zchat__av">S</span>Sếp 💼<span class="zchat__time">21:47 tối qua</span></div>
-        <div class="zbub">Em ơi mai anh họp HĐTV rồi 😅 Làm anh cái slide <b>tổng quan tình hình</b>, ngắn thôi nhưng phải <b>đầy đủ</b>, đẹp vào nhưng <b>đừng màu mè</b> quá. Trước 8h sáng mai nhé, cảm ơn em!</div>
-        <div class="zchat__q">🤔 Tin này tưởng rõ mà thiếu gần hết — thiếu những gì?</div>
+        <div class="zbub">Em ơi chiều mai anh báo cáo <b>kế hoạch SXKD 2026</b> với HĐTV 😅 Em làm giúp anh bộ slide nhé, cứ bám theo <b>tờ trình Ban QLDA gửi tuần trước</b> ấy. Làm gọn gàng, chuyên nghiệp vào. Sáng mai anh xem trước nhé!</div>
+        <div class="zchat__q">🤔 Đọc thì tưởng đủ — ngồi vào làm mới thấy hỏng chỗ nào?</div>
       </div>
       <div class="ac-reveal ac-reveal--right" style="--i:4">
         <div class="pfbar" style="margin:0 0 .6rem;justify-content:flex-start"><b><span data-flipcount="flip6">0</span>/6</b> thẻ đã lật</div>
         <div class="flip6" id="flip6" data-flipwrap>
-          <div class="fcard"><div class="fcard__front"><i>?</i>Thẻ 1</div><div class="fcard__back"><span class="fcard__tag">Bối cảnh</span><p>“Tổng quan tình hình” là tình hình GÌ ạ — SXKD, tài chính, hay cả 6 tháng?</p></div></div>
-          <div class="fcard"><div class="fcard__front"><i>?</i>Thẻ 2</div><div class="fcard__back"><span class="fcard__tag">Đối tượng</span><p>HĐTV xem trực tiếp hay đọc trước ạ? Anh trình trong mấy phút?</p></div></div>
-          <div class="fcard"><div class="fcard__front"><i>?</i>Thẻ 3</div><div class="fcard__back"><span class="fcard__tag">Nhiệm vụ</span><p>Anh cần 1 trang tổng quan, hay bộ slide đầy đủ ạ?</p></div></div>
-          <div class="fcard"><div class="fcard__front"><i>?</i>Thẻ 4</div><div class="fcard__back"><span class="fcard__tag">Ràng buộc</span><p>“Đừng màu mè” = theo template PVEP chuẩn ạ? Số liệu chốt đến tháng mấy?</p></div></div>
-          <div class="fcard"><div class="fcard__front"><i>?</i>Thẻ 5</div><div class="fcard__back"><span class="fcard__tag">Định dạng ra</span><p>Anh nhận PowerPoint hay PDF ạ? Chiếu màn 16:9 phòng họp lớn?</p></div></div>
-          <div class="fcard"><div class="fcard__front"><i>★</i>Thẻ 6 — không phải để hỏi sếp</div><div class="fcard__back"><span class="fcard__tag" style="background:rgba(124,58,237,.12);color:var(--purple)">Vai trò của AI — phần 6/6</span><p>Sếp trả lời 5 câu trên là prompt đủ 5 phần. Phần cuối tự mình thêm khi gõ cho AI: <b>“Bạn là chuyên gia thiết kế slide báo cáo lãnh đạo…”</b> — đủ 6/6.</p></div></div>
+          <div class="fcard"><div class="fcard__front"><i>?</i>Thẻ 1</div><div class="fcard__back"><span class="fcard__tag">Mục tiêu buổi báo cáo</span><p>Số trang và thời lượng trình bày cụ thể là bao nhiêu ạ?</p></div></div>
+          <div class="fcard"><div class="fcard__front"><i>?</i>Thẻ 2</div><div class="fcard__back"><span class="fcard__tag">Nguồn số liệu</span><p>Mình chốt dùng bộ số liệu nào, cập nhật đến thời điểm nào và so sánh với KH 2025 hay thực hiện 2025 ạ?</p></div></div>
+          <div class="fcard"><div class="fcard__front"><i>?</i>Thẻ 3</div><div class="fcard__back"><span class="fcard__tag">Chỉ tiêu trọng tâm</span><p>HĐTV cần tập trung vào chỉ tiêu nào: sản lượng, doanh thu, lợi nhuận, đầu tư, dòng tiền hay nộp ngân sách ạ?</p></div></div>
+          <div class="fcard"><div class="fcard__front"><i>?</i>Thẻ 4</div><div class="fcard__back"><span class="fcard__tag">Vấn đề cần giải trình</span><p>Có chỉ tiêu nào biến động lớn, chưa đạt hoặc tiềm ẩn rủi ro cần chuẩn bị nguyên nhân và phương án xử lý không ạ?</p></div></div>
+          <div class="fcard"><div class="fcard__front"><i>?</i>Thẻ 5</div><div class="fcard__back"><span class="fcard__tag">Kết luận cần đạt</span><p>Sau báo cáo, anh muốn HĐTV kết luận, quyết định hoặc giao nhiệm vụ cụ thể gì ạ?</p></div></div>
+          <div class="fcard"><div class="fcard__front"><i>★</i>Thẻ 6 — không phải để hỏi sếp</div><div class="fcard__back"><span class="fcard__tag" style="background:rgba(124,58,237,.12);color:var(--purple)">Vai trò của AI — phần 6/6</span><p>Sếp trả lời 5 câu trên là prompt đủ 5 phần. Phần cuối tự thêm khi gõ: <b>“Bạn là chuyên gia làm slide báo cáo HĐTV…”</b></p></div></div>
         </div>
       </div>
     </div>
-    <div class="note note--fun ac-reveal" style="--i:5">Nhìn lại 6 thẻ: <b>đây chính là 6 phần của prompt</b>. Hỏi lại sếp xong 5 câu là prompt tự thành hình — <b>người giỏi prompt trước hết là người giỏi hỏi lại</b>. 😄</div>
+    <div class="note note--fun ac-reveal" style="--i:5">Hỏi lại sếp 5 câu là <b>prompt tự thành hình</b> — thêm vai trò cho AI nữa là đủ 6 phần. <b>Người giỏi prompt trước hết là người giỏi hỏi lại.</b> 😄</div>
   </div></div>
 </section>
 
@@ -2020,13 +2058,66 @@ body{
   </div></div>
 </section>
 
+<!-- ==================== SLIDE 9B — MASTER TEXT → SLIDE (2 prompt nối nhau) ==================== -->
+<section class="slide" data-chapter="2" id="s-mastertext">
+  <div class="slide-content"><div class="wrap wrap--wide">
+    <div class="head-center">
+      <div class="eyebrow ac-reveal" style="--i:0">Cách 1 · Prompt thật, gõ là chạy</div>
+      <h2 class="s-title s-title--sm ac-reveal" style="--i:1">Chốt chữ trước, vẽ hình sau — <span class="neo">2 prompt nối nhau</span></h2>
+      <p class="lead-note ac-reveal" style="--i:1">Bắt AI vừa nghĩ nội dung vừa vẽ một lượt là lúc nó bịa nhiều nhất. <b>Prompt 1</b> chốt nguyên văn từng dòng chữ — <b>master text</b>. <b>Prompt 2</b> chỉ vẽ đúng khối chữ đó.</p>
+    </div>
+    <div class="flow3 ac-reveal" style="--i:2">
+      <span class="fn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg>Báo cáo 32 trang</span>
+      <span class="fa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      <span class="fn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h13"/></svg>Master text (chỉ chữ)</span>
+      <span class="fa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      <span class="fn fn--out pulse"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Slide 16:9</span>
+    </div>
+    <div class="promptwrap" style="grid-template-columns:1fr 1fr">
+      <div class="prompt ac-reveal ac-reveal--left" style="--i:3">
+        <div class="prompt__bar"><i></i><i></i><i></i><b>prompt 1 — viết master text</b></div>
+        <div class="prompt__body">
+          <span class="k">Vai trò:</span> chuyên gia viết nội dung slide trình lãnh đạo.<br>
+          <span class="k">Bối cảnh:</span> báo cáo giám sát 6 tháng đầu năm đính kèm (32 trang).<br>
+          <span class="k">Đối tượng:</span> HĐTV, tôi trình trong 3 phút.<br>
+          <span class="k">Nhiệm vụ:</span> viết master text cho 1 slide “7 nhóm rủi ro cần giám sát”. <b>Chỉ viết chữ, chưa vẽ gì cả.</b><br><br>
+          <span class="k">Trả về đúng khuôn này:</span>
+          <span class="li">Tiêu đề slide: ≤ 8 từ</span>
+          <span class="li">Thông điệp chính: 1 câu, ≤ 20 từ</span>
+          <span class="li">7 dòng, mỗi dòng: tên nhóm ≤ 6 từ + mức (Thấp / Trung bình / Cao / Rất cao)</span>
+          <span class="li">Số liệu: chép <b>nguyên văn</b> từ tài liệu, ghi kèm trang trích</span><br>
+          <span class="k">Ràng buộc:</span>
+          <span class="li">Chỗ tài liệu không nói rõ → ghi <span class="ph">“cần kiểm tra”</span>, KHÔNG tự suy ra</span>
+          <span class="li">Không dùng từ hoa mỹ, viết như người báo cáo nói<span class="cur"></span></span>
+        </div>
+      </div>
+      <div class="prompt ac-reveal ac-reveal--right" style="--i:4">
+        <div class="prompt__bar"><i></i><i></i><i></i><b>prompt 2 — vẽ slide từ master text</b></div>
+        <div class="prompt__body">
+          <span class="k">Nhiệm vụ:</span> vẽ 1 infographic 16:9 từ master text dưới đây.<br><br>
+          <span class="k">Master text (đã duyệt, dán nguyên khối):</span>
+          <span class="li">7 NHÓM RỦI RO CẦN GIÁM SÁT</span>
+          <span class="li">01 · Thị trường &amp; tài chính — Rất cao</span>
+          <span class="li">02 · Sản lượng &amp; khai thác — Trung bình … đủ 7 dòng</span><br>
+          <span class="k">Yêu cầu:</span>
+          <span class="li"><span class="ph">Dùng ĐÚNG các dòng chữ trên</span> — không thêm, không bớt, không viết lại</span>
+          <span class="li">Bố cục: tiêu đề trên cùng · ma trận 5×5 bên trái · 7 dòng nhóm bên phải</span>
+          <span class="li">Màu theo mức: xanh → vàng → cam → đỏ</span>
+          <span class="li">Tiếng Việt có dấu, chữ đủ to để đọc khi chiếu; xuất ảnh 16:9 dán PowerPoint<span class="cur"></span></span>
+        </div>
+      </div>
+    </div>
+    <div class="note note--fun ac-reveal" style="--i:5">Giữa 2 prompt là <b>2 phút của người</b>: đọc lại master text, sửa số. Chữ sai thì vẽ đẹp mấy cũng phải làm lại.</div>
+  </div></div>
+</section>
+
 <!-- ==================== SLIDE 10 — PROMPT INFOGRAPHIC ==================== -->
 <section class="slide" data-chapter="2">
   <div class="slide-content"><div class="wrap wrap--wide">
     <div class="head-center">
       <div class="eyebrow ac-reveal" style="--i:0">Cách 1 · Mẹo tiết kiệm thời gian</div>
       <h2 class="s-title s-title--sm ac-reveal" style="--i:1">Có mẫu đẹp rồi? Bảo AI <span class="neo">mô phỏng cho chủ đề mới</span></h2>
-      <p class="lead-note ac-reveal" style="--i:1">Thay vì tả từ số 0, đưa <b>1 ảnh infographic mẫu</b> kèm prompt “làm cái tương tự, không bịa số” → AI giữ nguyên bố cục đẹp, chỉ thay nội dung của bạn.</p>
+      <p class="lead-note ac-reveal" style="--i:1">Đưa <b>1 ảnh mẫu</b> rồi nói rõ <b>cái gì phải giữ nguyên, cái gì được thay</b>. Khoá bố cục và bảng màu thì slide nào cũng ra cùng một nhà — dù nội dung khác hẳn nhau.</p>
     </div>
     <div class="flow3 ac-reveal" style="--i:2">
       <span class="fn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg>Ảnh mẫu đẹp</span>
@@ -2037,25 +2128,29 @@ body{
     </div>
     <div class="promptwrap">
       <div class="prompt ac-reveal ac-reveal--left" style="--i:2">
-        <div class="prompt__bar"><i></i><i></i><i></i><b>prompt — mô phỏng infographic</b></div>
+        <div class="prompt__bar"><i></i><i></i><i></i><b>prompt — khoá giao diện, thay nội dung</b></div>
         <div class="prompt__body">
-          Dựa vào <span class="k">infographic đính kèm</span>, hãy tạo cho tôi <span class="k">1 infographic tương tự</span>.<br><br>
-          <span class="k">Chủ đề của tôi:</span> <span class="ph">[chủ đề]</span><br>
+          Ảnh đính kèm là <span class="k">CHUẨN GIAO DIỆN</span>, không phải nội dung. Hãy vẽ 1 infographic mới cho nội dung của tôi theo đúng giao diện đó.<br><br>
+          <span class="k">Chủ đề:</span> <span class="ph">[tiến độ 5 dự án trọng điểm]</span><br>
           <span class="k">Đối tượng xem:</span> <span class="ph">[lãnh đạo / pháp chế / vận hành]</span><br>
-          <span class="k">Master text:</span> <span class="ph">[Nội dung]</span><br><br>
-          <span class="k">Yêu cầu:</span>
-          <span class="li">Giữ đúng bố cục: tiêu đề + ma trận rủi ro 5×5 + danh sách nhóm</span>
-          <span class="li">Mỗi ý ngắn gọn, không quá 12 từ</span>
-          <span class="li">Màu phân cấp: xanh → vàng → cam → đỏ</span>
-          <span class="li">KHÔNG tự bịa thông tin — chưa chắc thì ghi “cần kiểm tra”</span>
-          <span class="li">Không thêm icon rườm rà<span class="cur"></span></span>
+          <span class="k">Master text:</span> <span class="ph">[dán khối chữ đã duyệt ở trang trước]</span><br><br>
+          <span class="k">GIỮ NGUYÊN — không được đổi:</span>
+          <span class="li">Khung 16:9, lề, vị trí và cỡ tiêu đề</span>
+          <span class="li">Lưới bố cục của mẫu (trái = khối hình, phải = danh sách)</span>
+          <span class="li">Bảng màu, chỉ dùng đúng: <span class="ph">#0A2A4A #0083C7 #00B050 #F97316 #DC2626</span></span>
+          <span class="li">Kiểu chữ, độ đậm, kiểu icon (nét mảnh, 1 màu)</span><br>
+          <span class="k">CHỈ THAY:</span> chữ và số theo master text.
+          <span class="li">Nội dung ít/nhiều dòng hơn mẫu → giãn đều trong lưới cũ, KHÔNG đổi bố cục</span>
+          <span class="li">Không thêm màu, icon, hoạ tiết, nền mới</span>
+          <span class="li">KHÔNG bịa số — chưa chắc thì ghi “cần kiểm tra”</span>
+          <span class="li">Gọi bộ giao diện này là <span class="ph">STYLE-01</span><span class="cur"></span></span>
         </div>
       </div>
       <div class="pvw ac-reveal ac-reveal--right" style="--i:3">
-        <div class="pvw__tag">Infographic mẫu — để AI mô phỏng</div>
+        <div class="pvw__tag">Ảnh mẫu — dùng làm chuẩn giao diện</div>
         <div style="font-family:var(--font-display);font-weight:800;color:var(--pvep-navy);font-size:clamp(.8rem,1.5vw,1.05rem);margin:.4rem 0 .5rem;text-align:center">7 nhóm rủi ro cần giám sát</div>
-        <img src="assets/7_nhom_rui_ro.png" style="width: 100%; max-width: 500px; margin: 0 auto; display: block; border-radius: 8px; box-shadow: 0 12px 30px rgba(10,42,74,0.1);" alt="7 Nhóm rủi ro cần giám sát">
-        <div class="pvw__cap" style="text-align:center">Đưa <b>ảnh infographic này</b> kèm prompt → AI học bố cục &amp; làm bản của bạn, không bịa số.</div>
+        <img src="assets/7_nhom_rui_ro.png" style="width: 100%; max-width: 420px; margin: 0 auto; display: block; border-radius: 8px; box-shadow: 0 12px 30px rgba(10,42,74,0.1);" alt="Infographic mẫu 7 nhóm rủi ro cần giám sát">
+        <div class="pvw__cap">Chủ đề khác hẳn vẫn dùng được ảnh này — AI chỉ mượn <b>bố cục và màu</b>. Từ slide thứ 2, <b>trong cùng cuộc chat</b> chỉ cần gõ:<br><b style="color:var(--pvep-blue)">“Dùng STYLE-01. Nội dung mới: …”</b> — không đính kèm lại ảnh, không tả lại bố cục.</div>
       </div>
     </div>
   </div></div>
@@ -2121,7 +2216,7 @@ body{
 <section class="slide" data-chapter="2" id="s-sanloi">
   <div class="slide-content"><div class="wrap wrap--wide">
     <div class="head-center">
-      <div class="eyebrow ac-reveal" style="--i:0">Phần III · Trò chơi 2 <span class="tslot tslot--game" style="margin-left:.5rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>10:15–10:30 · 15 phút</span></div>
+      <div class="eyebrow ac-reveal" style="--i:0">Phần III · Trò chơi 2 <span class="tslot tslot--game" style="margin-left:.5rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>10:45–11:00 · 15 phút</span></div>
       <h2 class="s-title s-title--sm ac-reveal" style="--i:1">🔍 SĂN LỖI AI — <span style="color:var(--danger)">slide này có 3 lỗi</span></h2>
       <p class="lead-note ac-reveal" style="--i:2">AI làm ra nó trong 40 giây, trông rất chuyên nghiệp. <b>Bấm vào chỗ anh/chị nghi ngờ</b> — cẩn thận, có dòng nhìn đáng ngờ nhưng lại <b>không sai</b>.</p>
     </div>
@@ -2177,46 +2272,6 @@ body{
       </div>
     </div>
     <div class="note note--info ac-reveal" style="--i:5">Dưới 10 điểm → làm lại · 10–15 → sửa thêm · <b>từ 16 trở lên → trình được</b>. Bảng này nằm trong KIT anh/chị cầm về.</div>
-  </div></div>
-</section>
-
-<!-- ==================== SLIDE — LAB 1 ==================== -->
-<section class="slide" data-chapter="2" id="s-lab1">
-  <div class="slide-content"><div class="wrap wrap--wide">
-    <div class="head-center">
-      <div class="eyebrow ac-reveal" style="--i:0">Phần III · Thực hành <span class="tslot tslot--lab" style="margin-left:.5rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>10:30–11:00 · 30 phút</span></div>
-      <h2 class="s-title s-title--sm ac-reveal" style="--i:1">🛠 LAB 1 — <span class="neo-g">tài liệu thật của anh/chị</span> → 1 infographic</h2>
-    </div>
-    <div class="lab">
-      <div class="labcard labcard--do ac-reveal ac-reveal--left" style="--i:2">
-        <div class="labcard__h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Làm theo 5 bước</div>
-        <ol class="labsteps">
-          <li>Mở <b>tài liệu thật</b> anh/chị mang theo</li>
-          <li>Trả lời 3 câu: <b>ai xem · hiểu gì · quyết gì</b></li>
-          <li>Viết prompt <b>đủ 6 phần</b> (dùng thẻ prompt trên bàn)</li>
-          <li>Cho AI chạy → nhận infographic 16:9</li>
-          <li><b>Tự chấm</b> bằng bảng 5 tiêu chí vừa xem</li>
-        </ol>
-      </div>
-      <div class="labcard labcard--rule ac-reveal ac-reveal--up" style="--i:3">
-        <div class="labcard__h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>Bị kẹt thì làm gì</div>
-        <ul class="rlist rlist--warn">
-          <li><b>Không có tài liệu?</b> → dùng 1 trong 5 chủ đề mẫu tôi phát</li>
-          <li><b>AI trả ra chữ đầy trang?</b> → thêm ràng buộc “≤ 3 ý/slide”</li>
-          <li><b>Sai trọng tâm?</b> → prompt còn thiếu phần “Đối tượng”</li>
-          <li><b>Vẫn bí?</b> → giơ tay, tôi đến bàn</li>
-        </ul>
-        <div class="deliver" style="margin-top:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>Nộp vào thư mục chung — đặt tên: <b>Tên_LAB1</b></div>
-      </div>
-      <div class="timer ac-reveal ac-reveal--right" style="--i:4" data-timer="1800">
-        <div class="timer__ring">
-          <svg viewBox="0 0 120 120"><circle class="timer__track" cx="60" cy="60" r="52"/><circle class="timer__bar" cx="60" cy="60" r="52" data-len="326.7" style="--len:326.7" stroke-dasharray="326.7"/></svg>
-          <div class="timer__c"><b data-tval>30:00</b><span>còn lại</span></div>
-        </div>
-        <div class="timer__btns"><button data-tstart>Bắt đầu</button><button data-treset>Đặt lại</button></div>
-      </div>
-    </div>
-    <div class="note note--fun ac-reveal" style="--i:5">Chưa đẹp cũng <b>không sao</b> — buổi chiều ta sẽ làm cho nó đẹp. Sáng nay chỉ cần <b>đúng ý</b>. 🌿</div>
   </div></div>
 </section>
 
@@ -2351,50 +2406,13 @@ body{
   </div></div>
 </section>
 
-<!-- ==================== SLIDE 16 — PROMPT CLAUDE CODE ==================== -->
-<section class="slide" data-chapter="2">
-  <div class="slide-content"><div class="wrap wrap--wide">
-    <div class="head-center">
-      <div class="eyebrow ac-reveal" style="--i:0">Cách 3 · Prompt Claude Code</div>
-      <h2 class="s-title s-title--sm ac-reveal" style="--i:1">Dùng khi cần deck HTML chuyên nghiệp</h2>
-    </div>
-    <div class="promptwrap">
-      <div class="prompt ac-reveal ac-reveal--left" style="--i:2">
-        <div class="prompt__bar"><i></i><i></i><i></i><b>prompt — deck HTML</b></div>
-        <div class="prompt__body">
-          Bạn là chuyên gia thiết kế slide theo <span class="k">skill pvep_slide</span>.<br>
-          Tạo bộ slide HTML từ outline dưới đây.<br><br>
-          <span class="k">Yêu cầu:</span>
-          <span class="li">Mỗi slide 1 thông điệp chính · tối đa 3 bullet</span>
-          <span class="li">Có speaker notes</span>
-          <span class="li">Layout hiện đại · navy / trắng / xám nhạt</span>
-          <span class="li">Component: heatmap, dashboard, timeline, cards nếu hợp</span>
-          <span class="li">Tự kiểm tra lỗi hiển thị sau khi tạo</span><br>
-          <span class="k">Đầu ra:</span> index.html + CSS/JS · chạy offline<span class="cur"></span>
-        </div>
-      </div>
-      <div class="ac-reveal ac-reveal--right" style="--i:3">
-        <div class="panel" style="height:100%;display:flex;flex-direction:column;justify-content:center">
-          <div class="panel__t"><span class="ti" style="background:var(--pvep-green)"></span>Đầu ra Claude Code trả về</div>
-          <div class="files" style="justify-content:flex-start;margin-top:.2rem">
-            <span class="file"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3v5h5M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>index.html</span>
-            <span class="file"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3v5h5M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>style.css</span>
-            <span class="file"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3v5h5M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>script.js</span>
-          </div>
-          <div class="note note--info" style="margin-top:1rem;text-align:left">Nhìn prompt &amp; đoán: còn <b>thiếu gì</b> để deck đúng ý bạn hơn? (đối tượng? số slide? phối màu?)</div>
-        </div>
-      </div>
-    </div>
-  </div></div>
-</section>
-
 <!-- ==================== SLIDE — BRANDKIT PVEP ==================== -->
 <section class="slide" data-chapter="2" id="s-brandkit">
   <div class="slide-content"><div class="wrap wrap--wide">
     <div class="head-center">
       <div class="eyebrow ac-reveal" style="--i:0">Cách 3 · Màu thương hiệu</div>
-      <h2 class="s-title s-title--sm ac-reveal" style="--i:1">Muốn AI ra đúng “chất PVEP”? <span class="neo-g">Đưa brandkit</span></h2>
-      <p class="lead-note ac-reveal" style="--i:2">Tôi đã dựng sẵn <b>1 file brandkit PVEP</b> (bảng màu · font · mẫu ứng dụng) — nằm trong thư mục dùng chung, ai cũng lấy được. Đính kèm nó là AI hết “tự chế màu”.</p>
+      <h2 class="s-title s-title--sm ac-reveal" style="--i:1">Brandkit PVEP — <span class="neo-g">tự tạo trong 5 phút</span></h2>
+      <p class="lead-note ac-reveal" style="--i:2">Bảng màu bên trái không phải tôi ngồi dò từng mã. Đưa AI <b>logo + vài slide đã được duyệt</b>, bảo nó hút mã màu ra thành <b>1 ảnh brandkit</b>. Từ đó slide nào cũng đính kèm ảnh này.</p>
     </div>
     <div class="bkwrap">
       <div class="ac-reveal ac-reveal--left" style="--i:3">
@@ -2433,18 +2451,68 @@ body{
         </div>
       </div>
       <div class="ac-reveal ac-reveal--right" style="--i:4">
+        <div class="flow3" style="justify-content:flex-start;margin-bottom:.7rem">
+          <span class="fn"><b style="color:var(--pvep-blue)">1</b>Gom logo + 3 slide cũ</span>
+          <span class="fa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          <span class="fn"><b style="color:var(--pvep-blue)">2</b>AI hút mã màu</span>
+          <span class="fa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          <span class="fn fn--out"><b>3</b>1 ảnh brandkit</span>
+        </div>
         <div class="prompt">
-          <div class="prompt__bar"><i></i><i></i><i></i><b>prompt — kèm brandkit</b></div>
+          <div class="prompt__bar"><i></i><i></i><i></i><b>prompt — tạo brandkit</b></div>
           <div class="prompt__body">
-            <span class="k">[Đính kèm file brandkit PVEP]</span><br><br>
-            Làm slide theo <span class="k">đúng brandkit đính kèm</span>:
-            <span class="li">Xanh lá 00A651 chủ đạo · navy 23286B nhấn</span>
-            <span class="li">Tiêu đề font Sora, thân Be Vietnam Pro</span>
-            <span class="li">Không tự chế màu ngoài bảng này</span><span class="cur"></span>
+            <span class="k">Vai trò:</span> chuyên gia nhận diện thương hiệu.<br>
+            <span class="k">Đính kèm:</span> <span class="ph">logo PVEP + 2–3 slide/báo cáo đã được duyệt</span><br>
+            <span class="k">Nhiệm vụ:</span> dựng <span class="k">1 ảnh brandkit 16:9</span> cho bộ nhận diện này.<br><br>
+            <span class="k">Trong ảnh phải có:</span>
+            <span class="li">Dải màu chính 3–5 ô, ghi <b>mã HEX ngay dưới mỗi ô</b></span>
+            <span class="li">Dải màu phụ (nền · chữ) và màu nhấn, ghi rõ “dùng ≤ 10% diện tích”</span>
+            <span class="li">2 font: tiêu đề &amp; thân bài — chọn font <b>đủ dấu tiếng Việt</b></span>
+            <span class="li">1 ô ví dụ áp dụng: tiêu đề + đoạn văn + số liệu</span><br>
+            <span class="k">Ràng buộc:</span>
+            <span class="li">Hút mã màu <b>đúng từ ảnh đính kèm</b>, không tự chế màu mới</span>
+            <span class="li">Ưu tiên màu logo làm màu chính; nền trắng, không hoạ tiết<span class="cur"></span></span>
           </div>
         </div>
-        <div class="note note--info" style="margin-top:.9rem;text-align:left">Dùng được cho <b>cả 3 cách</b>: đính kèm ảnh brandkit vào ChatGPT/Moda/Claude trước khi ra lệnh — AI tự bám màu, không cần tả bằng lời.</div>
         <a class="menti-btn" style="margin-top:.9rem" href="assets/brandkit-pvep.png" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg>Mở ảnh brandkit PVEP (bản đầy đủ)</a>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ==================== SLIDE 16 — PROMPT CLAUDE CODE ==================== -->
+<section class="slide" data-chapter="2">
+  <div class="slide-content"><div class="wrap wrap--wide">
+    <div class="head-center">
+      <div class="eyebrow ac-reveal" style="--i:0">Cách 3 · Prompt Claude Code</div>
+      <h2 class="s-title s-title--sm ac-reveal" style="--i:1">Dùng khi cần deck HTML chuyên nghiệp</h2>
+    </div>
+    <div class="promptwrap">
+      <div class="prompt ac-reveal ac-reveal--left" style="--i:2">
+        <div class="prompt__bar"><i></i><i></i><i></i><b>prompt — deck HTML</b></div>
+        <div class="prompt__body">
+          Bạn là chuyên gia thiết kế slide theo <span class="k">skill pvep_slide</span>.<br>
+          Tạo bộ slide HTML từ outline dưới đây.<br>
+          <span class="k">Đính kèm:</span> <span class="ph">ảnh brandkit PVEP</span> — bám đúng màu &amp; font trong đó, không tự chế màu.<br><br>
+          <span class="k">Yêu cầu:</span>
+          <span class="li">Mỗi slide 1 thông điệp chính · tối đa 3 bullet</span>
+          <span class="li">Có speaker notes</span>
+          <span class="li">Layout hiện đại · navy / trắng / xám nhạt</span>
+          <span class="li">Component: heatmap, dashboard, timeline, cards nếu hợp</span>
+          <span class="li">Tự kiểm tra lỗi hiển thị sau khi tạo</span><br>
+          <span class="k">Đầu ra:</span> index.html + CSS/JS · chạy offline<span class="cur"></span>
+        </div>
+      </div>
+      <div class="ac-reveal ac-reveal--right" style="--i:3">
+        <div class="panel" style="height:100%;display:flex;flex-direction:column;justify-content:center">
+          <div class="panel__t"><span class="ti" style="background:var(--pvep-green)"></span>Đầu ra Claude Code trả về</div>
+          <div class="files" style="justify-content:flex-start;margin-top:.2rem">
+            <span class="file"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3v5h5M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>index.html</span>
+            <span class="file"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3v5h5M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>style.css</span>
+            <span class="file"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3v5h5M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>script.js</span>
+          </div>
+          <div class="note note--info" style="margin-top:1rem;text-align:left">Nhìn prompt &amp; đoán: còn <b>thiếu gì</b> để deck đúng ý bạn hơn? (đối tượng? số slide? phối màu?)</div>
+        </div>
       </div>
     </div>
   </div></div>
@@ -2507,6 +2575,46 @@ body{
       <span><span style="width:14px;height:14px;border-radius:4px;background:rgba(0,176,80,.25);display:inline-block"></span>Ô xanh = mạnh nhất hàng</span>
     </div>
     <div class="cmphuman ac-reveal" style="--i:5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Kiểm tra đúng/sai nghiệp vụ &amp; số liệu → luôn là việc của <span class="neo">con người</span></div>
+  </div></div>
+</section>
+
+<!-- ==================== SLIDE — LAB TỔNG KẾT (sau khi học đủ 3 cách) ==================== -->
+<section class="slide" data-chapter="2" id="s-lab1">
+  <div class="slide-content"><div class="wrap wrap--wide">
+    <div class="head-center">
+      <div class="eyebrow ac-reveal" style="--i:0">Phần III · Bài tổng kết <span class="tslot tslot--lab" style="margin-left:.5rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>14:45–15:15 · 30 phút</span></div>
+      <h2 class="s-title s-title--sm ac-reveal" style="--i:1">🛠 LAB TỔNG KẾT — <span class="neo-g">tài liệu thật của anh/chị</span> → 1 sản phẩm</h2>
+    </div>
+    <div class="lab">
+      <div class="labcard labcard--do ac-reveal ac-reveal--left" style="--i:2">
+        <div class="labcard__h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Làm theo 5 bước</div>
+        <ol class="labsteps">
+          <li>Mở <b>tài liệu thật</b> anh/chị mang theo</li>
+          <li>Trả lời 3 câu: <b>ai xem · hiểu gì · quyết gì</b></li>
+          <li>Viết prompt <b>đủ 6 phần</b> (dùng thẻ prompt trên bàn)</li>
+          <li><b>Chọn 1 trong 3 cách</b> vừa học → chạy ra sản phẩm</li>
+          <li><b>Tự chấm</b> bằng bảng 5 tiêu chí vừa xem</li>
+        </ol>
+      </div>
+      <div class="labcard labcard--rule ac-reveal ac-reveal--up" style="--i:3">
+        <div class="labcard__h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>Bị kẹt thì làm gì</div>
+        <ul class="rlist rlist--warn">
+          <li><b>Không biết chọn cách nào?</b> → xem lại bảng so sánh trang trước</li>
+          <li><b>Không có tài liệu?</b> → dùng 1 trong 5 chủ đề mẫu tôi phát</li>
+          <li><b>AI trả ra chữ đầy trang?</b> → thêm ràng buộc “≤ 3 ý/slide”</li>
+          <li><b>Sai trọng tâm?</b> → prompt còn thiếu phần “Đối tượng”</li>
+        </ul>
+        <div class="deliver" style="margin-top:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>Nộp vào thư mục chung — đặt tên: <b>Tên_LAB</b></div>
+      </div>
+      <div class="timer ac-reveal ac-reveal--right" style="--i:4" data-timer="1800">
+        <div class="timer__ring">
+          <svg viewBox="0 0 120 120"><circle class="timer__track" cx="60" cy="60" r="52"/><circle class="timer__bar" cx="60" cy="60" r="52" data-len="326.7" style="--len:326.7" stroke-dasharray="326.7"/></svg>
+          <div class="timer__c"><b data-tval>30:00</b><span>còn lại</span></div>
+        </div>
+        <div class="timer__btns"><button data-tstart>Bắt đầu</button><button data-treset>Đặt lại</button></div>
+      </div>
+    </div>
+    <div class="note note--fun ac-reveal" style="--i:5">Chưa đẹp cũng <b>không sao</b> — cầm prompt về, chạy lại 5 phút là ra bản mới. Hôm nay chỉ cần <b>đúng ý</b>. 🌿</div>
   </div></div>
 </section>
 
@@ -2696,7 +2804,7 @@ body{
 <section class="slide" data-chapter="3" id="s-trienlam">
   <div class="slide-content"><div class="wrap wrap--wide">
     <div class="head-center">
-      <div class="eyebrow ac-reveal" style="--i:0">Phần IV · Trò chơi 3 <span class="tslot tslot--game" style="margin-left:.5rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>15:10–15:35 · 25 phút</span></div>
+      <div class="eyebrow ac-reveal" style="--i:0">Phần IV · Trò chơi 3 <span class="tslot tslot--game" style="margin-left:.5rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>15:30–15:45 · 15 phút</span></div>
       <h2 class="s-title s-title--sm ac-reveal" style="--i:1">🤖 AI HAY NGƯỜI? — <span class="neo-g">thử xem mắt anh/chị tinh cỡ nào</span></h2>
       <p class="lead-note ac-reveal" style="--i:2">5 đoạn chữ lấy từ đời thật. Luật chơi: tôi đọc to từng đoạn — <b>nghĩ là AI thì giơ tay, nghĩ là Người thì khoanh tay</b> — rồi tôi bấm lật đáp án ngay trên slide. Đúng cả 5 = “Mắt thần”, có quà. 🏆</p>
     </div>
@@ -3038,6 +3146,17 @@ body{
   apply("truoc");
 })();
 
+/* ===== watermark tác giả trên mọi slide ===== */
+(function(){
+  var TXT="Đoàn Thái Việt - KSNB PVEP";
+  document.querySelectorAll(".slide").forEach(function(s){
+    if(s.querySelector(":scope > .wmark")) return;
+    var w=document.createElement("div");
+    w.className="wmark"; w.setAttribute("aria-hidden","true"); w.textContent=TXT;
+    s.appendChild(w);
+  });
+})();
+
 /* ===== reveal-on-enter (.ac-on) ===== */
 (function(){
   var SEL=".slide", RATIO=.5;
@@ -3060,6 +3179,7 @@ body{
   function setC(i){current=Math.max(0,Math.min(total-1,i));curEl.textContent=current+1;
     fill.style.width=((current+1)/total*100)+"%";
     var fp=document.getElementById("footPage");if(fp)fp.textContent=current+1;
+    document.body.classList.toggle("hero-mode",slides[current].hasAttribute("data-hero"));
     var ft=document.getElementById("footTot");if(ft)ft.textContent=total;
     var ch=slides[current].getAttribute("data-chapter");
     rail.forEach(function(el){
